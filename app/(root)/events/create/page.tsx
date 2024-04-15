@@ -5,6 +5,10 @@ const CreateEvent = () => {
   const { sessionClaims } = auth();
 
   const userId = sessionClaims?.userId as string;
+  console.log("UserID:", userId);
+
+  
+
 
   return (
     <>
@@ -15,8 +19,11 @@ const CreateEvent = () => {
       <div className="wrapper my-8">
         <EventForm userId={userId} type="Create" />
       </div>
+      
     </>
   )
+  
 }
+
 
 export default CreateEvent
