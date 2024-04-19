@@ -1,29 +1,30 @@
-'use client'
+import { useCallback, Dispatch, SetStateAction } from 'react';
+import type { FileWithPath } from '@uploadthing/react';
+import { useDropzone } from '@uploadthing/react/hooks';
+import { generateClientDropzoneAccept } from 'uploadthing/client';
 
-import { useCallback, Dispatch, SetStateAction } from 'react'
-import type { FileWithPath } from '@uploadthing/react'
-import { useDropzone } from '@uploadthing/react/hooks'
-import { generateClientDropzoneAccept } from 'uploadthing/client'
-
-import { Button } from '@/components/ui/button'
-import { convertFileToUrl } from '@/lib/utils'
+import { Button } from '@/components/ui/button';
+import { convertFileToUrl } from '@/lib/utils';
 
 type FileUploaderProps = {
-  onFieldChange: (url: string) => void
-  imageUrl: string
-  setFiles: Dispatch<SetStateAction<File[]>>
-}
+  onFieldChange: (url: string) => void;
+  imageUrl: string;
+  setFiles: Dispatch<SetStateAction<File[]>>;
+};
 
 export function FileUploader({ imageUrl, onFieldChange, setFiles }: FileUploaderProps) {
   const onDrop = useCallback((acceptedFiles: FileWithPath[]) => {
-    setFiles(acceptedFiles)
-    onFieldChange(convertFileToUrl(acceptedFiles[0]))
-  }, [])
+    console.log('Accepted files:', acceptedFiles); // Log des fichiers acceptés
+    setFiles(acceptedFiles);
+    const url = convertFileToUrl(acceptedFiles[0]);
+    console.log('Generated URL:', url); // Log de l'URL générée
+    onFieldChange(url);
+  }, [setFiles, onFieldChange]);
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: 'image/*' ? generateClientDropzoneAccept(['image/*']) : undefined,
-  })
+  });
 
   return (
     <div
@@ -52,5 +53,5 @@ export function FileUploader({ imageUrl, onFieldChange, setFiles }: FileUploader
         </div>
       )}
     </div>
-  )
+  );
 }
